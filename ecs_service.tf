@@ -48,7 +48,7 @@ resource "aws_ecs_service" "whoami" {
 }
 
 resource "aws_cloudwatch_log_group" "traefik" {
-  name              = "traefik-new"
+  name              = "traefik"
   retention_in_days = 1
 }
 

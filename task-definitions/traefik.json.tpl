@@ -17,20 +17,6 @@
       "--certificatesresolvers.le.acme.email=${lets_encrypt_email}",
       "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
     ],
-    
-    "dockerLabels": {
-      "traefik.enable": "true",
-
-      "traefik.http.routers.traefik-secure.rule": "Host(`${traefik_hostname}`)",
-      "traefik.http.routers.traefik-secure.entrypoints": "websecure",
-      "traefik.http.routers.traefik-secure.tls": "true",
-      "traefik.http.routers.traefik-secure.tls.options": "default",
-      "traefik.http.routers.traefik-secure.service": "service-traefik-traefik",
-      "traefik.http.routers.traefik-secure.tls.certresolver": "le",
-
-      "traefik.http.services.service-traefik-traefik.loadbalancer.server.port": "8080"
-
-    },
     "mountPoints": [
       {
         "sourceVolume": "letsencrypt",
@@ -38,7 +24,6 @@
         "readOnly": false
       }
     ],
-
     "logConfiguration":{
       "logDriver": "awslogs",
       "options": {

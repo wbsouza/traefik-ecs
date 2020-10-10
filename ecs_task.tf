@@ -1,5 +1,9 @@
 data "aws_region" "current" {}
 
+locals {
+  app_hostname = var.app_hostname == "example.com" ? aws_lb.traefik.dns_name : var.app_hostname
+}
+
 resource "aws_ecs_task_definition" "traefik" {
   family = "traefik"
 
@@ -15,7 +19,6 @@ resource "aws_ecs_task_definition" "traefik" {
     aws_access_key          = aws_iam_access_key.traefik.id
     secret_arn              = aws_secretsmanager_secret.traefik_secret_access_key.id
     lets_encrypt_email      = var.lets_encrypt_email
-    traefik_hostname        = var.traefik_hostname
   })
 
   requires_compatibilities = ["FARGATE"]
@@ -30,7 +33,7 @@ resource "aws_ecs_task_definition" "whoami" {
   family = "whoami"
   container_definitions = templatefile("task-definitions/whoami.json.tpl", {
     alb_endpoint        = aws_lb.traefik.dns_name
-    app_hostname            = var.app_hostname
+    app_hostname            = local.app_hostname
   })
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
